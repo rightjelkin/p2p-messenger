@@ -1,0 +1,20 @@
+[workspace.package]
+name = "p2p-mes"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = [
+    "crates/node"
+]
+resolver = "2"
+
+[workspace.dependencies]
+clap = { version = "4.5.27", features = ["derive"] }
+futures = "0.3.30"
+hex = "0.4"
+libp2p = { version = "0.56.0", features = ["tcp","dns","noise","yamux","kad","gossipsub","identify","mdns","quic","secp256k1", "tokio", "ping"] }
+serde = { version = "1.0.210", features = ["derive"] }
+tokio = { version = "1.37.0", features = ["full"] }
+toml = "0.9.7"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
