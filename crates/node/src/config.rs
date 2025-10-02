@@ -8,16 +8,16 @@ use libp2p::Multiaddr;
 pub struct RawAppConfig {
     pub private_key: String,
     pub listen: String,
-    pub bootnode: Option<String>
+    pub bootnodes: Option<Vec<String>>
 }
 
 pub struct AppConfig {
     pub keypair: Keypair,
     pub listen: Multiaddr,
-    pub bootnode: Option<Multiaddr>
+    pub bootnodes: Option<Vec<Multiaddr>>
 }
 
-fn keypair_from_secp256k1_hex(hex_priv: &str) -> Result<Keypair, Box<dyn Error>> {
+pub(crate) fn keypair_from_secp256k1_hex(hex_priv: &str) -> Result<Keypair, Box<dyn Error>> {
     let s = hex_priv.strip_prefix("0x").unwrap_or(hex_priv);
 
     let bytes = Vec::<u8>::from_hex(s)?;
@@ -56,6 +56,6 @@ pub fn load_config(config_path: PathBuf) -> AppConfig {
     AppConfig { 
         keypair: keypair_from_secp256k1_hex(&config.private_key).unwrap(),
         listen: config.listen.parse().unwrap(),
-        bootnode: config.bootnode.map(|d| d.parse().unwrap())
+        bootnodes: config.bootnodes.map(|d| d.iter().map(|d| d.parse().unwrap()).collect())
     }
 }

@@ -10,10 +10,11 @@ members = [
 resolver = "2"
 
 [workspace.dependencies]
+anyhow = "1.0.99"
 clap = { version = "4.5.27", features = ["derive"] }
 futures = "0.3.30"
 hex = "0.4"
-libp2p = { version = "0.56.0", features = ["tcp","dns","noise","yamux","kad","gossipsub","identify","mdns","quic","secp256k1", "tokio", "ping"] }
+libp2p = { version = "0.56.0", features = ["tcp", "dns", "noise", "yamux", "kad", "gossipsub", "identify", "quic", "secp256k1", "tokio", "ping", "quic", "autonat", "macros",]}
 serde = { version = "1.0.210", features = ["derive"] }
 tokio = { version = "1.37.0", features = ["full"] }
 toml = "0.9.7"
