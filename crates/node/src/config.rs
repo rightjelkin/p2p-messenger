@@ -8,13 +8,15 @@ use libp2p::Multiaddr;
 pub struct RawAppConfig {
     pub private_key: String,
     pub listen: String,
-    pub bootnodes: Option<Vec<String>>
+    pub bootnodes: Option<Vec<String>>,
+    pub listen_api: Option<String>,
 }
 
 pub struct AppConfig {
     pub keypair: Keypair,
     pub listen: Multiaddr,
-    pub bootnodes: Option<Vec<Multiaddr>>
+    pub bootnodes: Option<Vec<Multiaddr>>,
+    pub listen_api: Option<std::net::SocketAddr>,
 }
 
 pub(crate) fn keypair_from_secp256k1_hex(hex_priv: &str) -> Result<Keypair, Box<dyn Error>> {
@@ -56,6 +58,7 @@ pub fn load_config(config_path: PathBuf) -> AppConfig {
     AppConfig { 
         keypair: keypair_from_secp256k1_hex(&config.private_key).unwrap(),
         listen: config.listen.parse().unwrap(),
-        bootnodes: config.bootnodes.map(|d| d.iter().map(|d| d.parse().unwrap()).collect())
+        bootnodes: config.bootnodes.map(|d| d.iter().map(|d| d.parse().unwrap()).collect()),
+        listen_api: config.listen_api.map(|d| d.parse().unwrap_or("0.0.0.0:8080".parse().unwrap())),
     }
 }

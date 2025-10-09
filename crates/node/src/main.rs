@@ -7,7 +7,7 @@ use tracing_subscriber::EnvFilter;
 use libp2p::{autonat, identify, kad, noise, ping, swarm::{NetworkBehaviour, SwarmEvent}, tcp, yamux, StreamProtocol, PeerId, multiaddr::Protocol};
 use std::time::Duration;
 use futures::prelude::*;
-
+use api::listen_api;
 
 #[derive(NetworkBehaviour)]
 struct MyBehaviour {
@@ -79,6 +79,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     let local_peer_id = swarm.local_peer_id().clone();
     let _ = swarm.behaviour_mut().kademlia.get_closest_peers(local_peer_id);
+
+    let http_bind: std::net::SocketAddr = config.listen_api.clone().unwrap();
+    tokio::spawn(listen_api(http_bind));
 
     loop {
         match swarm.select_next_some().await {
